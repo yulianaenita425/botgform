@@ -1,0 +1,37 @@
+{
+  "submittedIndices": [
+    0,
+    1,
+    2
+  ],
+  "history": [
+    {
+      "index": 2,
+      "rowNum": 4,
+      "namaUsaha": "Tempe UtiQ",
+      "device": "Edge Windows 10",
+      "timestamp": "2026-11-18T14:30:03.159Z",
+      "duration": "0.5s",
+      "status": "SUCCESS"
+    },
+    {
+      "index": 1,
+      "rowNum": 3,
+      "namaUsaha": "Geprek Jawara",
+      "device": "iPhone 15 Pro (Safari)",
+      "timestamp": "2026-11-18T14:29:53.827Z",
+      "duration": "1.6s",
+      "status": "SUCCESS"
+    },
+    {
+      "index": 0,
+      "rowNum": 2,
+      "namaUsaha": "Jamu Murni",
+      "device": "Edge Windows 10",
+      "timestamp": "2026-11-18T14:29:27.298Z",
+      "duration": "1.0s",
+      "status": "SUCCESS"
+    }
+  ],
+  "lastUpdated": "2026-11-18T14:30:03.159Z"
+}

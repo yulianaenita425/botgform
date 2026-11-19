@@ -1,0 +1,7 @@
+node_modules/
+*.log
+botgfrom_cpanel.zip
+scratch/
+.system_generated/
+.vscode/
+sess_*

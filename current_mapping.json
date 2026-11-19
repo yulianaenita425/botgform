@@ -1,0 +1,702 @@
+{
+  "formUrl": "https://forms.gle/NxsK4k16ZHecHsk27",
+  "viewUrl": "https://docs.google.com/forms/d/e/1FAIpQLSdV9w8CEwmI7k4u5Q-HZaaWLgxc8ly5Y5i5NTtr_022Ae0z1w/viewform?usp=send_form",
+  "submitUrl": "https://docs.google.com/forms/d/e/1FAIpQLSdV9w8CEwmI7k4u5Q-HZaaWLgxc8ly5Y5i5NTtr_022Ae0z1w/formResponse?usp=send_form",
+  "pageHistory": "0,1,2,3,4,5,6,7,8,9",
+  "mapping": {
+    "115486430": {
+      "entryId": 115486430,
+      "questionTitle": "Kecamatan :",
+      "type": 3,
+      "options": [
+        "Manguharjo",
+        "Taman",
+        "Kartoharjo"
+      ],
+      "excelColumn": "Kecamatan :"
+    },
+    "236638218": {
+      "entryId": 236638218,
+      "questionTitle": "BDS4. Saya menggunakan informasi pemasaran yang saya terima melalui IKM JUARA.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "BDS4. Saya menggunakan informasi pemasaran yang saya terima melalui IKM JUARA."
+    },
+    "241716828": {
+      "entryId": 241716828,
+      "questionTitle": "Peran dalam usaha :",
+      "type": 3,
+      "options": [
+        "Pemilik",
+        "Pemilik sekaligus pengelola",
+        "Pengelola utama"
+      ],
+      "excelColumn": "Peran dalam usaha :"
+    },
+    "271175555": {
+      "entryId": 271175555,
+      "questionTitle": "G4. Secara keseluruhan, hasil usaha saya membaik dalam 12 bulan terakhir dibandingkan dengan 12 bulan sebelumnya.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "G4. Secara keseluruhan, hasil usaha saya membaik dalam 12 bulan terakhir dibandingkan dengan 12 bulan sebelumnya."
+    },
+    "272459335": {
+      "entryId": 272459335,
+      "questionTitle": "Apakah usaha bergerak dalam industri pengolahan?",
+      "type": 2,
+      "options": [
+        "Ya",
+        "Tidak"
+      ],
+      "excelColumn": "Apakah usaha bergerak dalam industri pengolahan? "
+    },
+    "307245181": {
+      "entryId": 307245181,
+      "questionTitle": "KU3. Laba usaha setelah dikurangi seluruh biaya usaha meningkat.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "KU3. Laba usaha setelah dikurangi seluruh biaya usaha meningkat."
+    },
+    "314767069": {
+      "entryId": 314767069,
+      "questionTitle": "Usia :",
+      "type": 3,
+      "options": [
+        "<25 tahun",
+        "25–34",
+        "35–44",
+        "45–54",
+        "≥55 tahun"
+      ],
+      "excelColumn": "Usia :"
+    },
+    "406895683": {
+      "entryId": 406895683,
+      "questionTitle": "IN4. Usaha saya menerapkan susunan alur produksi yang berbeda dari sebelumnya.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "IN4. Usaha saya menerapkan susunan alur produksi yang berbeda dari sebelumnya."
+    },
+    "409161970": {
+      "entryId": 409161970,
+      "questionTitle": "Apakah usaha telah berjalan sekurang-kurangnya dua tahun?",
+      "type": 2,
+      "options": [
+        "Ya",
+        "Tidak"
+      ],
+      "excelColumn": "Apakah usaha telah berjalan sekurang-kurangnya dua tahun?  "
+    },
+    "476072044": {
+      "entryId": 476072044,
+      "questionTitle": "Apakah usaha masih aktif saat ini?",
+      "type": 2,
+      "options": [
+        "Ya",
+        "Tidak"
+      ],
+      "excelColumn": "Apakah usaha masih aktif saat ini?  "
+    },
+    "490081303": {
+      "entryId": 490081303,
+      "questionTitle": "Pendidikan terakhir :",
+      "type": 3,
+      "options": [
+        "SD/sederajat",
+        "SMP",
+        "SMA/SMK",
+        "Diploma",
+        "Sarjana",
+        "Pascasarjana"
+      ],
+      "excelColumn": "Pendidikan terakhir :"
+    },
+    "519652687": {
+      "entryId": 519652687,
+      "questionTitle": "BDS8. Saya menggunakan informasi prosedur pembiayaan yang saya terima melalui IKM JUARA.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "BDS8. Saya menggunakan informasi prosedur pembiayaan yang saya terima melalui IKM JUARA."
+    },
+    "552950792": {
+      "entryId": 552950792,
+      "questionTitle": "IN6. Usaha saya menerapkan cara penyaluran produk kepada pelanggan yang berbeda dari sebelumnya.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "IN6. Usaha saya menerapkan cara penyaluran produk kepada pelanggan yang berbeda dari sebelumnya."
+    },
+    "643770612": {
+      "entryId": 643770612,
+      "questionTitle": "Jenis kelamin :",
+      "type": 2,
+      "options": [
+        "Laki-laki",
+        "Perempuan",
+        "Memilih tidak menjawab"
+      ],
+      "excelColumn": "Jenis kelamin :"
+    },
+    "668356012": {
+      "entryId": 668356012,
+      "questionTitle": "LD3. Saya mampu mencari informasi usaha melalui media digital.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "LD3. Saya mampu mencari informasi usaha melalui media digital."
+    },
+    "699856138": {
+      "entryId": 699856138,
+      "questionTitle": "Jenis Layanan :",
+      "type": 3,
+      "options": [
+        "Sertifikasi Halal",
+        "Pendaftaran HKI Merek",
+        "Uji Nilai Gizi",
+        "Pengembangan Kemasan",
+        "Pelatihan Diversifikasi Produk",
+        "Pendampingan SIINas",
+        "Konsultasi Usaha",
+        "Pelatihan Pemasaran",
+        "Pendampingan Produksi",
+        "Lainnya"
+      ],
+      "excelColumn": "Jenis Layanan :"
+    },
+    "876414925": {
+      "entryId": 876414925,
+      "questionTitle": "Layanan terakhir (Bulan / Tahun)",
+      "type": 0,
+      "options": [],
+      "excelColumn": "Layanan terakhir (Bulan / Tahun)"
+    },
+    "968935626": {
+      "entryId": 968935626,
+      "questionTitle": "Tanggal Pengisian :",
+      "type": 9,
+      "options": [],
+      "excelColumn": "Tanggal Pengisian :"
+    },
+    "1045527759": {
+      "entryId": 1045527759,
+      "questionTitle": "LD8.  Saya mampu menjalin hubungan dengan mitra usaha melalui media digital.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "LD8.  Saya mampu menjalin hubungan dengan mitra usaha melalui media digital."
+    },
+    "1085398310": {
+      "entryId": 1085398310,
+      "questionTitle": "Frekuensi BDS IKM JUARA, dalam 24 bulan terakhir :",
+      "type": 3,
+      "options": [
+        "1 Kali",
+        "2 Kali",
+        "3 Kali",
+        "≥4 kali"
+      ],
+      "excelColumn": "Frekuensi BDS IKM JUARA, dalam 24 bulan terakhir :"
+    },
+    "1087075123": {
+      "entryId": 1087075123,
+      "questionTitle": "KU8.  Jumlah produk yang dihasilkan per tenaga kerja pada waktu kerja yang sama meningkat dengan mutu tetap terjaga.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "KU8.  Jumlah produk yang dihasilkan per tenaga kerja pada waktu kerja yang sama meningkat dengan mutu tetap terjaga."
+    },
+    "1166071946": {
+      "entryId": 1166071946,
+      "questionTitle": "G1. Secara keseluruhan, saya mampu menggunakan teknologi dan informasi digital untuk menjalankan usaha.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "G1. Secara keseluruhan, saya mampu menggunakan teknologi dan informasi digital untuk menjalankan usaha."
+    },
+    "1176784737": {
+      "entryId": 1176784737,
+      "questionTitle": "BDS2. Saya menggunakan saran pendampingan manajemen dari IKM JUARA dalam menjalankan usaha.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "BDS2. Saya menggunakan saran pendampingan manajemen dari IKM JUARA dalam menjalankan usaha."
+    },
+    "1210375195": {
+      "entryId": 1210375195,
+      "questionTitle": "Jenis BDS IKM JUARA yang digunakan ( Boleh memilih lebih dari satu.)",
+      "type": 4,
+      "options": [
+        "Sertifikasi Halal",
+        "Pendaftaran HKI Merek",
+        "Uji Nilai Gizi",
+        "Pengembangan Kemasan",
+        "Pelatihan Diversifikasi Produk",
+        "Pendampingan SIINas",
+        "Konsultasi Usaha",
+        "Pelatihan Pemasaran",
+        "Pendampingan Produksi",
+        ""
+      ],
+      "excelColumn": "Jenis BDS IKM JUARA yang digunakan ( Boleh memilih lebih dari satu.)"
+    },
+    "1228170054": {
+      "entryId": 1228170054,
+      "questionTitle": "BDS3.  Saya menggunakan fasilitas promosi yang saya terima melalui IKM JUARA.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "BDS3.  Saya menggunakan fasilitas promosi yang saya terima melalui IKM JUARA."
+    },
+    "1290505806": {
+      "entryId": 1290505806,
+      "questionTitle": "BDS7. Saya menggunakan panduan pencatatan keuangan yang saya terima melalui IKM JUARA.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "BDS7. Saya menggunakan panduan pencatatan keuangan yang saya terima melalui IKM JUARA."
+    },
+    "1311329268": {
+      "entryId": 1311329268,
+      "questionTitle": "BDS5. Saya menggunakan panduan teknis yang saya terima dari IKM JUARA dalam kegiatan usaha.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "BDS5. Saya menggunakan panduan teknis yang saya terima dari IKM JUARA dalam kegiatan usaha."
+    },
+    "1350745351": {
+      "entryId": 1350745351,
+      "questionTitle": "BDS6. Saya menggunakan hasil fasilitasi legalitas atau standardisasi dari IKM JUARA untuk kebutuhan administrasi usaha.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "BDS6. Saya menggunakan hasil fasilitasi legalitas atau standardisasi dari IKM JUARA untuk kebutuhan administrasi usaha."
+    },
+    "1443546014": {
+      "entryId": 1443546014,
+      "questionTitle": "KU5. Jumlah pelanggan yang membeli produk usaha saya meningkat.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "KU5. Jumlah pelanggan yang membeli produk usaha saya meningkat."
+    },
+    "1458314966": {
+      "entryId": 1458314966,
+      "questionTitle": "IN2. Usaha saya memasarkan produk yang karakteristik atau kegunaannya telah diperbaiki.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "IN2. Usaha saya memasarkan produk yang karakteristik atau kegunaannya telah diperbaiki."
+    },
+    "1612328421": {
+      "entryId": 1612328421,
+      "questionTitle": "LD1. Saya mampu membuat informasi promosi produk menggunakan media digital.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "LD1. Saya mampu membuat informasi promosi produk menggunakan media digital. "
+    },
+    "1622016628": {
+      "entryId": 1622016628,
+      "questionTitle": "IN3. Usaha saya menggunakan metode produksi yang berbeda dari metode sebelumnya.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "IN3. Usaha saya menggunakan metode produksi yang berbeda dari metode sebelumnya."
+    },
+    "1632561967": {
+      "entryId": 1632561967,
+      "questionTitle": "IN5. Usaha saya menerapkan cara promosi yang berbeda dari sebelumnya.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "IN5. Usaha saya menerapkan cara promosi yang berbeda dari sebelumnya."
+    },
+    "1688313159": {
+      "entryId": 1688313159,
+      "questionTitle": "Apakah lokasi usaha berada di Kota Madiun?",
+      "type": 2,
+      "options": [
+        "Ya",
+        "Tidak"
+      ],
+      "excelColumn": "Apakah lokasi usaha berada di Kota Madiun?  "
+    },
+    "1697953118": {
+      "entryId": 1697953118,
+      "questionTitle": "LD2. Saya mampu menampilkan produk pada saluran penjualan digital yang digunakan usaha saya.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "LD2. Saya mampu menampilkan produk pada saluran penjualan digital yang digunakan usaha saya."
+    },
+    "1711864246": {
+      "entryId": 1711864246,
+      "questionTitle": "IN1. Usaha saya memperkenalkan produk baru yang berbeda dari produk sebelumnya kepada pelanggan.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "IN1. Usaha saya memperkenalkan produk baru yang berbeda dari produk sebelumnya kepada pelanggan."
+    },
+    "1717745012": {
+      "entryId": 1717745012,
+      "questionTitle": "IN8. Usaha saya menerapkan cara pembagian pekerjaan yang berbeda dari sebelumnya.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "IN8. Usaha saya menerapkan cara pembagian pekerjaan yang berbeda dari sebelumnya."
+    },
+    "1718549869": {
+      "entryId": 1718549869,
+      "questionTitle": "A. Persetujuan Menjadi Responden",
+      "type": 2,
+      "options": [
+        "Saya telah membaca penjelasan di atas dan bersedia menjadi responden.",
+        "Saya tidak bersedia menjadi responden. Jika memilih pilihan ini, pengisian dihentikan."
+      ],
+      "excelColumn": " A. Persetujuan Menjadi Responden"
+    },
+    "1727030918": {
+      "entryId": 1727030918,
+      "questionTitle": "Jumlah tenaga kerja :",
+      "type": 3,
+      "options": [
+        "1–4 orang",
+        "5–19 orang",
+        "20–99 orang",
+        "≥100 orang"
+      ],
+      "excelColumn": "Jumlah tenaga kerja :"
+    },
+    "1768734822": {
+      "entryId": 1768734822,
+      "questionTitle": "Subsektor / Bergerak di bidang :",
+      "type": 3,
+      "options": [
+        "Makanan/minuman",
+        "Tekstil/fesyen",
+        "Kerajinan",
+        "Logam/mesin",
+        "Kimia/kosmetik/herbal"
+      ],
+      "excelColumn": "Subsektor / Bergerak di bidang :"
+    },
+    "1802767732": {
+      "entryId": 1802767732,
+      "questionTitle": "G3. Secara keseluruhan, usaha saya telah menerapkan pembaruan yang berbeda secara berarti dalam 12 bulan terakhir.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "G3. Secara keseluruhan, usaha saya telah menerapkan pembaruan yang berbeda secara berarti dalam 12 bulan terakhir."
+    },
+    "1821482366": {
+      "entryId": 1821482366,
+      "questionTitle": "LD4. Saya mampu memeriksa kebenaran informasi digital sebelum menggunakannya untuk usaha.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "LD4. Saya mampu memeriksa kebenaran informasi digital sebelum menggunakannya untuk usaha."
+    },
+    "1864961241": {
+      "entryId": 1864961241,
+      "questionTitle": "KU7. Jumlah produk yang dihasilkan per jam kerja meningkat dengan mutu tetap terjaga.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "KU7. Jumlah produk yang dihasilkan per jam kerja meningkat dengan mutu tetap terjaga."
+    },
+    "1877364843": {
+      "entryId": 1877364843,
+      "questionTitle": "KU4. Rata-rata laba bulanan usaha saya meningkat.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "KU4. Rata-rata laba bulanan usaha saya meningkat."
+    },
+    "1918528802": {
+      "entryId": 1918528802,
+      "questionTitle": "Apakah usaha menerima atau menggunakan sekurang-kurangnya satu layanan IKM JUARA dalam 24 bulan terakhir?",
+      "type": 2,
+      "options": [
+        "Ya",
+        "Tidak"
+      ],
+      "excelColumn": "Apakah usaha menerima atau menggunakan sekurang-kurangnya satu layanan IKM JUARA dalam 24 bulan terakhir?  "
+    },
+    "1941666185": {
+      "entryId": 1941666185,
+      "questionTitle": "BDS1.  Saya menggunakan materi pengelolaan usaha yang saya terima dari IKM JUARA.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "BDS1.  Saya menggunakan materi pengelolaan usaha yang saya terima dari IKM JUARA."
+    },
+    "1948076568": {
+      "entryId": 1948076568,
+      "questionTitle": "LD7. Saya mampu berkomunikasi dengan pelanggan melalui media digital.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "LD7. Saya mampu berkomunikasi dengan pelanggan melalui media digital."
+    },
+    "1961508888": {
+      "entryId": 1961508888,
+      "questionTitle": "IN7. Usaha saya menerapkan cara pencatatan usaha yang berbeda dari sebelumnya.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "IN7. Usaha saya menerapkan cara pencatatan usaha yang berbeda dari sebelumnya."
+    },
+    "1964281147": {
+      "entryId": 1964281147,
+      "questionTitle": "KU6. Rata-rata jumlah pelanggan yang membeli setiap bulan meningkat.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "KU6. Rata-rata jumlah pelanggan yang membeli setiap bulan meningkat."
+    },
+    "1979894799": {
+      "entryId": 1979894799,
+      "questionTitle": "LD5. Saya mampu melakukan pembayaran usaha melalui layanan pembayaran digital.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "LD5. Saya mampu melakukan pembayaran usaha melalui layanan pembayaran digital."
+    },
+    "2004914395": {
+      "entryId": 2004914395,
+      "questionTitle": "LD6. Saya mampu memeriksa bukti transaksi pada layanan pembayaran digital.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "LD6. Saya mampu memeriksa bukti transaksi pada layanan pembayaran digital."
+    },
+    "2052972619": {
+      "entryId": 2052972619,
+      "questionTitle": "KU1. Nilai penjualan usaha saya meningkat.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "KU1. Nilai penjualan usaha saya meningkat."
+    },
+    "2105578018": {
+      "entryId": 2105578018,
+      "questionTitle": "G2. Secara keseluruhan, saya menggunakan dukungan IKM JUARA dalam kegiatan usaha.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "G2. Secara keseluruhan, saya menggunakan dukungan IKM JUARA dalam kegiatan usaha."
+    },
+    "2113021609": {
+      "entryId": 2113021609,
+      "questionTitle": "Lama Usaha :",
+      "type": 3,
+      "options": [
+        "1–3 tahun",
+        "4–6 tahun",
+        "7–10 tahun",
+        ">10 tahun"
+      ],
+      "excelColumn": "Lama Usaha :"
+    },
+    "2119621872": {
+      "entryId": 2119621872,
+      "questionTitle": "KU2. Rata-rata penerimaan bulanan dari penjualan produk usaha saya meningkat.",
+      "type": 3,
+      "options": [
+        "Sangat Tidak Setuju",
+        "Tidak Setuju",
+        "Netral",
+        "Setuju",
+        "Sangat Setuju"
+      ],
+      "excelColumn": "KU2. Rata-rata penerimaan bulanan dari penjualan produk usaha saya meningkat."
+    },
+    "2128661255": {
+      "entryId": 2128661255,
+      "questionTitle": "Nama Usaha :",
+      "type": 0,
+      "options": [],
+      "excelColumn": "Nama Usaha :"
+    }
+  }
+}

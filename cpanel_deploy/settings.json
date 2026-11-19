@@ -1,0 +1,9 @@
+{
+  "formUrl": "https://forms.gle/QTUB2CCTNuzLjdpd7",
+  "batchSize": 10,
+  "delayMinMinutes": 3,
+  "delayMinSeconds": 10,
+  "delayMaxMinutes": 5,
+  "delayMaxSeconds": 30,
+  "lastUpdated": "2026-11-18T13:42:36.182Z"
+}

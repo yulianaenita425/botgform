@@ -1,0 +1,7 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/manjapos/botgfrom.manjapos.my.id
+    - /bin/mkdir -p $DEPLOYPATH
+    - /bin/cp -R cpanel_deploy/* $DEPLOYPATH/
+    - /bin/cp cpanel_deploy/.htaccess $DEPLOYPATH/

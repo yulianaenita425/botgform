@@ -1,0 +1,1095 @@
+[
+  {
+    "idx": 0,
+    "title": "Bagian Tanpa Judul",
+    "help": null,
+    "type": 8,
+    "entries": []
+  },
+  {
+    "idx": 1,
+    "title": " A. Persetujuan Menjadi Responden",
+    "help": null,
+    "type": 2,
+    "entries": [
+      {
+        "id": 1718549869,
+        "options": [
+          "Saya telah membaca penjelasan di atas dan bersedia menjadi responden.",
+          "Saya tidak bersedia menjadi responden. Jika memilih pilihan ini, pengisian dihentikan."
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 2,
+    "title": " B. Petunjuk Umum Pengisian",
+    "help": "1. Baca setiap pertanyaan dan pernyataan secara teliti.\n2. Pilihlah pada satu pilihan yang paling sesuai.\n3. Jawab berdasarkan kondisi usaha yang Bapak/Ibu kelola, bukan berdasarkan kondisi usaha lain.\n4. Pastikan seluruh pertanyaan telah terisi sebelum kuesioner dikirim",
+    "type": 8,
+    "entries": []
+  },
+  {
+    "idx": 3,
+    "title": "C. Pertanyaan Penyaring",
+    "help": "Satu IKM hanya diwakili oleh satu pemilik atau pengelola utama",
+    "type": 8,
+    "entries": []
+  },
+  {
+    "idx": 4,
+    "title": "Apakah usaha bergerak dalam industri pengolahan? ",
+    "help": null,
+    "type": 2,
+    "entries": [
+      {
+        "id": 272459335,
+        "options": [
+          "Ya",
+          "Tidak"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 5,
+    "title": "Apakah lokasi usaha berada di Kota Madiun?  ",
+    "help": null,
+    "type": 2,
+    "entries": [
+      {
+        "id": 1688313159,
+        "options": [
+          "Ya",
+          "Tidak"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 6,
+    "title": "Apakah usaha masih aktif saat ini?  ",
+    "help": null,
+    "type": 2,
+    "entries": [
+      {
+        "id": 476072044,
+        "options": [
+          "Ya",
+          "Tidak"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 7,
+    "title": "Apakah usaha telah berjalan sekurang-kurangnya dua tahun?  ",
+    "help": null,
+    "type": 2,
+    "entries": [
+      {
+        "id": 409161970,
+        "options": [
+          "Ya",
+          "Tidak"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 8,
+    "title": "Apakah usaha menerima atau menggunakan sekurang-kurangnya satu layanan IKM JUARA dalam 24 bulan terakhir?  ",
+    "help": "Layanan IKM JUARA (Fasilitasi dan Pelatihan Halal, HKI Merek, Cetak Kemasan, Uji Nilai Gizi, Pendampingan SIINas, Diversifikasi Produk, Konsultasi Usaha dan Pemasaran dari DisnakerKUKM Kota Madiun)",
+    "type": 2,
+    "entries": [
+      {
+        "id": 1918528802,
+        "options": [
+          "Ya",
+          "Tidak"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 9,
+    "title": "D. Identitas Responden dan Profil Usaha",
+    "help": null,
+    "type": 8,
+    "entries": []
+  },
+  {
+    "idx": 10,
+    "title": "Tanggal Pengisian :",
+    "help": null,
+    "type": 9,
+    "entries": [
+      {
+        "id": 968935626,
+        "options": null,
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 11,
+    "title": "Jenis kelamin :",
+    "help": null,
+    "type": 2,
+    "entries": [
+      {
+        "id": 643770612,
+        "options": [
+          "Laki-laki",
+          "Perempuan",
+          "Memilih tidak menjawab"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 12,
+    "title": "Usia :",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 314767069,
+        "options": [
+          "<25 tahun",
+          "25–34",
+          "35–44",
+          "45–54",
+          "≥55 tahun"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 13,
+    "title": "Pendidikan terakhir :",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 490081303,
+        "options": [
+          "SD/sederajat",
+          "SMP",
+          "SMA/SMK",
+          "Diploma",
+          "Sarjana",
+          "Pascasarjana"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 14,
+    "title": "Peran dalam usaha :",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 241716828,
+        "options": [
+          "Pemilik",
+          "Pemilik sekaligus pengelola",
+          "Pengelola utama"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 15,
+    "title": "Nama Usaha :",
+    "help": null,
+    "type": 0,
+    "entries": [
+      {
+        "id": 2128661255,
+        "options": null,
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 16,
+    "title": "Kecamatan :",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 115486430,
+        "options": [
+          "Manguharjo",
+          "Taman",
+          "Kartoharjo"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 17,
+    "title": "Subsektor / Bergerak di bidang :",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1768734822,
+        "options": [
+          "Makanan/minuman",
+          "Tekstil/fesyen",
+          "Kerajinan",
+          "Logam/mesin",
+          "Kimia/kosmetik/herbal"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 18,
+    "title": "Lama Usaha :",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 2113021609,
+        "options": [
+          "1–3 tahun",
+          "4–6 tahun",
+          "7–10 tahun",
+          ">10 tahun"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 19,
+    "title": "Jumlah tenaga kerja :",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1727030918,
+        "options": [
+          "1–4 orang",
+          "5–19 orang",
+          "20–99 orang",
+          "≥100 orang"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 20,
+    "title": "Jenis BDS IKM JUARA yang digunakan ( Boleh memilih lebih dari satu.)",
+    "help": null,
+    "type": 4,
+    "entries": [
+      {
+        "id": 1210375195,
+        "options": [
+          "Sertifikasi Halal",
+          "Pendaftaran HKI Merek",
+          "Uji Nilai Gizi",
+          "Pengembangan Kemasan",
+          "Pelatihan Diversifikasi Produk",
+          "Pendampingan SIINas",
+          "Konsultasi Usaha",
+          "Pelatihan Pemasaran",
+          "Pendampingan Produksi",
+          ""
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 21,
+    "title": "Frekuensi BDS IKM JUARA, dalam 24 bulan terakhir :",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1085398310,
+        "options": [
+          "1 Kali",
+          "2 Kali",
+          "3 Kali",
+          "≥4 kali"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 22,
+    "title": "Layanan terakhir (Bulan / Tahun)",
+    "help": null,
+    "type": 0,
+    "entries": [
+      {
+        "id": 876414925,
+        "options": null,
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 23,
+    "title": "Jenis Layanan :",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 699856138,
+        "options": [
+          "Sertifikasi Halal",
+          "Pendaftaran HKI Merek",
+          "Uji Nilai Gizi",
+          "Pengembangan Kemasan",
+          "Pelatihan Diversifikasi Produk",
+          "Pendampingan SIINas",
+          "Konsultasi Usaha",
+          "Pelatihan Pemasaran",
+          "Pendampingan Produksi",
+          "Lainnya"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 24,
+    "title": "Literasi Digital (X₁)",
+    "help": "Fokus jawaban: Nilai kemampuan Bapak/Ibu saat ini dalam menggunakan teknologi dan informasi digital untuk kegiatan usaha.",
+    "type": 8,
+    "entries": []
+  },
+  {
+    "idx": 25,
+    "title": "LD1. Saya mampu membuat informasi promosi produk menggunakan media digital. ",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1612328421,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 26,
+    "title": "LD2. Saya mampu menampilkan produk pada saluran penjualan digital yang digunakan usaha saya.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1697953118,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 27,
+    "title": "LD3. Saya mampu mencari informasi usaha melalui media digital.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 668356012,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 28,
+    "title": "LD4. Saya mampu memeriksa kebenaran informasi digital sebelum menggunakannya untuk usaha.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1821482366,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 29,
+    "title": "LD5. Saya mampu melakukan pembayaran usaha melalui layanan pembayaran digital.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1979894799,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 30,
+    "title": "LD6. Saya mampu memeriksa bukti transaksi pada layanan pembayaran digital.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 2004914395,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 31,
+    "title": "LD7. Saya mampu berkomunikasi dengan pelanggan melalui media digital.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1948076568,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 32,
+    "title": "LD8.  Saya mampu menjalin hubungan dengan mitra usaha melalui media digital.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1045527759,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 33,
+    "title": "F.  Pemanfaatan Business Development Services (BDS) (X₂)",
+    "help": "Petunjuk khusus: Jawab berdasarkan layanan pelatihan, konsultasi, pendampingan, fasilitasi, atau pengembangan usaha yang digunakan dalam 24 bulan terakhir.\nLayanan IKM JUARA (Fasilitasi dan Pelatihan Halal, HKI Merek, Cetak Kemasan, Uji Nilai Gizi, Pendampingan SIINas, Diversifikasi Produk, Konsultasi Usaha dan Pemasaran dari DisnakerKUKM Kota Madiun)",
+    "type": 8,
+    "entries": []
+  },
+  {
+    "idx": 34,
+    "title": "BDS1.  Saya menggunakan materi pengelolaan usaha yang saya terima dari IKM JUARA.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1941666185,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 35,
+    "title": "BDS2. Saya menggunakan saran pendampingan manajemen dari IKM JUARA dalam menjalankan usaha.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1176784737,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 36,
+    "title": "BDS3.  Saya menggunakan fasilitas promosi yang saya terima melalui IKM JUARA.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1228170054,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 37,
+    "title": "BDS4. Saya menggunakan informasi pemasaran yang saya terima melalui IKM JUARA.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 236638218,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 38,
+    "title": "BDS5. Saya menggunakan panduan teknis yang saya terima dari IKM JUARA dalam kegiatan usaha.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1311329268,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 39,
+    "title": "BDS6. Saya menggunakan hasil fasilitasi legalitas atau standardisasi dari IKM JUARA untuk kebutuhan administrasi usaha.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1350745351,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 40,
+    "title": "BDS7. Saya menggunakan panduan pencatatan keuangan yang saya terima melalui IKM JUARA.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1290505806,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 41,
+    "title": "BDS8. Saya menggunakan informasi prosedur pembiayaan yang saya terima melalui IKM JUARA.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 519652687,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 42,
+    "title": "Inovasi (M)",
+    "help": "Petunjuk khusus: Jawab berdasarkan pembaruan yang benar-benar telah diterapkan dalam 12 bulan terakhir. Rencana yang belum dilaksanakan tidak dihitung sebagai inovasi.",
+    "type": 8,
+    "entries": []
+  },
+  {
+    "idx": 43,
+    "title": "IN1. Usaha saya memperkenalkan produk baru yang berbeda dari produk sebelumnya kepada pelanggan.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1711864246,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 44,
+    "title": "IN2. Usaha saya memasarkan produk yang karakteristik atau kegunaannya telah diperbaiki.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1458314966,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 45,
+    "title": "IN3. Usaha saya menggunakan metode produksi yang berbeda dari metode sebelumnya.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1622016628,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 46,
+    "title": "IN4. Usaha saya menerapkan susunan alur produksi yang berbeda dari sebelumnya.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 406895683,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 47,
+    "title": "IN5. Usaha saya menerapkan cara promosi yang berbeda dari sebelumnya.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1632561967,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 48,
+    "title": "IN6. Usaha saya menerapkan cara penyaluran produk kepada pelanggan yang berbeda dari sebelumnya.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 552950792,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 49,
+    "title": "IN7. Usaha saya menerapkan cara pencatatan usaha yang berbeda dari sebelumnya.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1961508888,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 50,
+    "title": "IN8. Usaha saya menerapkan cara pembagian pekerjaan yang berbeda dari sebelumnya.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1717745012,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 51,
+    "title": "Kinerja Usaha IKM (Y)",
+    "help": "Petunjuk khusus: Bandingkan kondisi usaha selama 12 bulan terakhir dengan 12 bulan sebelumnya. Jawaban dapat didasarkan pada catatan usaha atau penilaian terbaik Bapak/Ibu.",
+    "type": 8,
+    "entries": []
+  },
+  {
+    "idx": 52,
+    "title": "KU1. Nilai penjualan usaha saya meningkat.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 2052972619,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 53,
+    "title": "KU2. Rata-rata penerimaan bulanan dari penjualan produk usaha saya meningkat.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 2119621872,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 54,
+    "title": "KU3. Laba usaha setelah dikurangi seluruh biaya usaha meningkat.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 307245181,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 55,
+    "title": "KU4. Rata-rata laba bulanan usaha saya meningkat.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1877364843,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 56,
+    "title": "KU5. Jumlah pelanggan yang membeli produk usaha saya meningkat.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1443546014,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 57,
+    "title": "KU6. Rata-rata jumlah pelanggan yang membeli setiap bulan meningkat.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1964281147,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 58,
+    "title": "KU7. Jumlah produk yang dihasilkan per jam kerja meningkat dengan mutu tetap terjaga.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1864961241,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 59,
+    "title": "KU8.  Jumlah produk yang dihasilkan per tenaga kerja pada waktu kerja yang sama meningkat dengan mutu tetap terjaga.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1087075123,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 60,
+    "title": "Penilaian Keseluruhan",
+    "help": "Pernyataan berikut melengkapi pemeriksaan instrumen.",
+    "type": 8,
+    "entries": []
+  },
+  {
+    "idx": 61,
+    "title": "G1. Secara keseluruhan, saya mampu menggunakan teknologi dan informasi digital untuk menjalankan usaha.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1166071946,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 62,
+    "title": "G2. Secara keseluruhan, saya menggunakan dukungan IKM JUARA dalam kegiatan usaha.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 2105578018,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 63,
+    "title": "G3. Secara keseluruhan, usaha saya telah menerapkan pembaruan yang berbeda secara berarti dalam 12 bulan terakhir.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 1802767732,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  },
+  {
+    "idx": 64,
+    "title": "G4. Secara keseluruhan, hasil usaha saya membaik dalam 12 bulan terakhir dibandingkan dengan 12 bulan sebelumnya.",
+    "help": null,
+    "type": 3,
+    "entries": [
+      {
+        "id": 271175555,
+        "options": [
+          "Sangat Tidak Setuju",
+          "Tidak Setuju",
+          "Netral",
+          "Setuju",
+          "Sangat Setuju"
+        ],
+        "required": 1
+      }
+    ]
+  }
+]
