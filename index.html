@@ -1612,6 +1612,71 @@
             }).join('');
         }
 
+        // Anti-Throttle & Background Execution Engine (Bebas Minimize & Anti-Freeze)
+        let wakeLock = null;
+        let keepAliveAudio = null;
+        let backgroundWorker = null;
+
+        function getBackgroundWorker() {
+            if (backgroundWorker) return backgroundWorker;
+            try {
+                const blob = new Blob([`
+                    let timer = null;
+                    self.onmessage = function(e) {
+                        if (e.data.action === 'start') {
+                            if (timer) clearInterval(timer);
+                            timer = setInterval(function() {
+                                self.postMessage('tick');
+                            }, 1000);
+                        } else if (e.data.action === 'stop') {
+                            if (timer) clearInterval(timer);
+                            timer = null;
+                        }
+                    };
+                `], { type: 'application/javascript' });
+                backgroundWorker = new Worker(URL.createObjectURL(blob));
+            } catch (err) {
+                console.warn('Web Worker fallback', err);
+            }
+            return backgroundWorker;
+        }
+
+        async function activateBackgroundKeepAlive() {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                }
+            } catch (e) {}
+
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (AudioCtx && !keepAliveAudio) {
+                    keepAliveAudio = new AudioCtx();
+                    const osc = keepAliveAudio.createOscillator();
+                    const gain = keepAliveAudio.createGain();
+                    gain.gain.value = 0.00001; // inaudible
+                    osc.connect(gain);
+                    gain.connect(keepAliveAudio.destination);
+                    osc.start();
+                }
+            } catch (e) {}
+        }
+
+        function deactivateBackgroundKeepAlive() {
+            if (wakeLock) {
+                wakeLock.release().catch(() => {});
+                wakeLock = null;
+            }
+            if (keepAliveAudio) {
+                keepAliveAudio.close().catch(() => {});
+                keepAliveAudio = null;
+            }
+            if (backgroundWorker) {
+                backgroundWorker.postMessage({ action: 'stop' });
+            }
+            document.title = 'Auto-Injector Google Form | Local Dashboard';
+        }
+
         function setRunningUI(running) {
             isRunning = running;
             const btnStart = document.getElementById('btnStart');
@@ -1621,12 +1686,14 @@
             const liveStatus = document.getElementById('liveStatus');
 
             if (running) {
+                activateBackgroundKeepAlive();
                 btnStart.disabled = true;
                 btnStop.disabled = false;
                 badge.className = 'badge-status active';
                 badgeText.innerText = 'Sedang Menyuntik...';
                 liveStatus.style.display = 'block';
             } else {
+                deactivateBackgroundKeepAlive();
                 btnStart.disabled = false;
                 btnStop.disabled = true;
                 badge.className = 'badge-status';
@@ -1710,13 +1777,20 @@
         function startLiveCountdown(secondsRemaining, nextIndex, totalBatch, nextNama) {
             if (countdownTimer) clearInterval(countdownTimer);
 
-            let remaining = secondsRemaining;
+            const startTime = Date.now();
+            const endTime = startTime + (secondsRemaining * 1000);
             const liveStatus = document.getElementById('liveStatus');
+            const worker = getBackgroundWorker();
 
             function updateDisplay() {
+                const now = Date.now();
+                const remainingMs = Math.max(0, endTime - now);
+                const remaining = Math.ceil(remainingMs / 1000);
+
                 if (remaining <= 0) {
-                    clearInterval(countdownTimer);
-                    countdownTimer = null;
+                    if (worker) worker.postMessage({ action: 'stop' });
+                    if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
+                    document.title = 'Auto-Injector Google Form | Local Dashboard';
                     liveStatus.innerHTML = `⚡ Memulai pengiriman data berikutnya (${nextNama})...`;
                     return;
                 }
@@ -1727,15 +1801,23 @@
                 const padM = String(m).padStart(2, '0');
                 const padS = String(s).padStart(2, '0');
 
+                document.title = `[${padM}:${padS}] Jeda Data ke-${nextIndex}/${totalBatch} | Auto-Injector`;
+
                 liveStatus.innerHTML = `
-                    <div>⏳ <strong>Jeda antar data:</strong> Menunggu <strong>${formattedTime}</strong> sebelum data ke-${nextIndex} (${nextNama}).</div>
-                    <div style="margin-top:4px;">Hitung mundur: <span class="countdown-badge">${padM}:${padS}</span></div>
+                    <div>⏳ <strong>Jeda antar data (Mode Background Aktif):</strong> Menunggu <strong>${formattedTime}</strong> sebelum data ke-${nextIndex} (${nextNama}).</div>
+                    <div style="margin-top:4px;">Hitung mundur: <span class="countdown-badge">${padM}:${padS}</span> <small style="color: #15803d; margin-left: 6px; font-weight: 600;">⚡ Anti-Freeze Aktif</small></div>
                 `;
-                remaining--;
             }
 
-            updateDisplay();
+            if (worker) {
+                worker.onmessage = function(e) {
+                    if (e.data === 'tick') updateDisplay();
+                };
+                worker.postMessage({ action: 'start' });
+            }
+
             countdownTimer = setInterval(updateDisplay, 1000);
+            updateDisplay();
         }
 
         function initSSE() {

@@ -1689,6 +1689,73 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in
             }).join('');
         }
 
+        // Anti-Throttle & Background Execution Engine (Bebas Minimize & Anti-Freeze)
+        let wakeLock = null;
+        let keepAliveAudio = null;
+        let backgroundWorker = null;
+
+        function getBackgroundWorker() {
+            if (backgroundWorker) return backgroundWorker;
+            try {
+                const blob = new Blob([`
+                    let timer = null;
+                    self.onmessage = function(e) {
+                        if (e.data.action === 'start') {
+                            if (timer) clearInterval(timer);
+                            timer = setInterval(function() {
+                                self.postMessage('tick');
+                            }, 1000);
+                        } else if (e.data.action === 'stop') {
+                            if (timer) clearInterval(timer);
+                            timer = null;
+                        }
+                    };
+                `], { type: 'application/javascript' });
+                backgroundWorker = new Worker(URL.createObjectURL(blob));
+            } catch (err) {
+                console.warn('Web Worker fallback', err);
+            }
+            return backgroundWorker;
+        }
+
+        async function activateBackgroundKeepAlive() {
+            // 1. Screen Wake Lock (mencegah layar HP/laptop mati)
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                }
+            } catch (e) {}
+
+            // 2. Web Audio Keep-Alive (mencegah Chrome mem-freeze atau me-throttle tab saat diminimize)
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (AudioCtx && !keepAliveAudio) {
+                    keepAliveAudio = new AudioCtx();
+                    const osc = keepAliveAudio.createOscillator();
+                    const gain = keepAliveAudio.createGain();
+                    gain.gain.value = 0.00001; // nyaris hening / inaudible
+                    osc.connect(gain);
+                    gain.connect(keepAliveAudio.destination);
+                    osc.start();
+                }
+            } catch (e) {}
+        }
+
+        function deactivateBackgroundKeepAlive() {
+            if (wakeLock) {
+                wakeLock.release().catch(() => {});
+                wakeLock = null;
+            }
+            if (keepAliveAudio) {
+                keepAliveAudio.close().catch(() => {});
+                keepAliveAudio = null;
+            }
+            if (backgroundWorker) {
+                backgroundWorker.postMessage({ action: 'stop' });
+            }
+            document.title = 'Auto-Injector Google Form | botgfrom.manjapos.my.id';
+        }
+
         function setLocalRunningUI(running) {
             isLocalRunning = running;
             const btnStart = document.getElementById('btnStart');
@@ -1698,12 +1765,14 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in
             const liveStatus = document.getElementById('liveStatus');
 
             if (running) {
+                activateBackgroundKeepAlive();
                 btnStart.disabled = true;
                 btnStop.disabled = false;
                 badge.className = 'badge-status active';
                 badgeText.innerText = 'Sedang Menyuntik...';
                 liveStatus.style.display = 'block';
             } else {
+                deactivateBackgroundKeepAlive();
                 btnStart.disabled = false;
                 btnStop.disabled = true;
                 badge.className = 'badge-status';
@@ -1829,6 +1898,7 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in
         function stopInjectionLoop() {
             stopRequested = true;
             document.getElementById('liveStatus').innerHTML = '⚠️ Menghentikan proses...';
+            deactivateBackgroundKeepAlive();
             broadcastJobState({ isRunning: false });
             if (countdownTimer) {
                 clearInterval(countdownTimer);
@@ -1838,13 +1908,28 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in
 
         function runClientCountdown(totalSeconds, nextIndex, totalBatch, nextNama) {
             return new Promise(resolve => {
-                let remaining = totalSeconds;
+                const startTime = Date.now();
+                const endTime = startTime + (totalSeconds * 1000);
                 const liveStatus = document.getElementById('liveStatus');
+                const worker = getBackgroundWorker();
 
-                async function tick() {
-                    if (stopRequested || remaining <= 0) {
-                        clearInterval(countdownTimer);
-                        countdownTimer = null;
+                function handleTick() {
+                    if (stopRequested) {
+                        if (worker) worker.postMessage({ action: 'stop' });
+                        if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
+                        document.title = 'Auto-Injector Google Form | botgfrom.manjapos.my.id';
+                        resolve();
+                        return;
+                    }
+
+                    const now = Date.now();
+                    const remainingMs = Math.max(0, endTime - now);
+                    const remaining = Math.ceil(remainingMs / 1000);
+
+                    if (remaining <= 0) {
+                        if (worker) worker.postMessage({ action: 'stop' });
+                        if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
+                        document.title = 'Auto-Injector Google Form | botgfrom.manjapos.my.id';
                         resolve();
                         return;
                     }
@@ -1855,13 +1940,16 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in
                     const padM = String(m).padStart(2, '0');
                     const padS = String(s).padStart(2, '0');
 
+                    // Tampilkan hitungan mundur di Title Bar browser agar terlihat saat window diminimize
+                    document.title = `[${padM}:${padS}] Jeda Data ke-${nextIndex}/${totalBatch} | Auto-Injector`;
+
                     const delayTxt = `
-                        <div>⏳ <strong>Jeda antar data:</strong> Menunggu <strong>${formattedTime}</strong> sebelum data ke-${nextIndex} (${nextNama}).</div>
-                        <div style="margin-top:4px;">Hitung mundur: <span class="countdown-badge">${padM}:${padS}</span></div>
+                        <div>⏳ <strong>Jeda antar data (Mode Background Aktif):</strong> Menunggu <strong>${formattedTime}</strong> sebelum data ke-${nextIndex} (${nextNama}).</div>
+                        <div style="margin-top:4px;">Hitung mundur: <span class="countdown-badge">${padM}:${padS}</span> <small style="color: #15803d; margin-left: 6px; font-weight: 600;">⚡ Anti-Freeze Aktif (Aman diminimize)</small></div>
                     `;
                     liveStatus.innerHTML = delayTxt;
 
-                    if (remaining % 3 === 0) {
+                    if (remaining % 3 === 0 || remaining === 1) {
                         broadcastJobState({
                             isRunning: true,
                             current: nextIndex - 1,
@@ -1869,12 +1957,19 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in
                             statusText: delayTxt
                         });
                     }
-
-                    remaining--;
                 }
 
-                tick();
-                countdownTimer = setInterval(tick, 1000);
+                if (worker) {
+                    worker.onmessage = function(e) {
+                        if (e.data === 'tick') handleTick();
+                    };
+                    worker.postMessage({ action: 'start' });
+                }
+
+                if (countdownTimer) clearInterval(countdownTimer);
+                countdownTimer = setInterval(handleTick, 1000);
+
+                handleTick();
             });
         }
 
