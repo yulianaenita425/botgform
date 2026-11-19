@@ -1,17 +1,20 @@
 <?php
-session_start();
+if (php_sapi_name() !== 'cli') {
+    if (session_status() === PHP_SESSION_NONE) {
+        @session_start();
+    }
+    // Prevent all forms of caching across proxies, browsers, and cPanel
+    header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+    header("Cache-Control: post-check=0, pre-check=0", false);
+    header("Pragma: no-cache");
+    header("Expires: 0");
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+    header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
-// Prevent all forms of caching across proxies, browsers, and cPanel
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
-header("Expires: 0");
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization');
-
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    exit(0);
+    if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+        exit(0);
+    }
 }
 
 $workDir = __DIR__;
@@ -108,6 +111,256 @@ function parseExcelDate($serial) {
     return ['year' => $y, 'month' => $m, 'day' => $d, 'str' => "$y-$m-$d"];
 }
 
+function executeSubmitRow($rowIdx, $excelDataPath, $mappingPath, $settingsPath, $progressPath) {
+    global $deviceProfiles;
+
+    $excelRows = loadJson($excelDataPath, []);
+    if (!isset($excelRows[$rowIdx])) {
+        return ['success' => false, 'error' => 'Data index tidak ditemukan'];
+    }
+
+    $row = $excelRows[$rowIdx];
+    $mappingInfo = loadJson($mappingPath, []);
+    $settings = loadJson($settingsPath, []);
+    $targetFormUrl = isset($mappingInfo['formUrl']) ? $mappingInfo['formUrl'] : (isset($settings['formUrl']) ? $settings['formUrl'] : 'https://forms.gle/d9Z6dsyNxaLQgYvb8');
+
+    $viewUrl = isset($mappingInfo['viewUrl']) ? $mappingInfo['viewUrl'] : $targetFormUrl;
+    $submitUrl = isset($mappingInfo['submitUrl']) ? $mappingInfo['submitUrl'] : str_replace('/viewform', '/formResponse', $targetFormUrl);
+    $pageHistory = isset($mappingInfo['pageHistory']) ? $mappingInfo['pageHistory'] : '0,1,2,3,4,5,6,7,8,9';
+    $mapping = isset($mappingInfo['mapping']) ? $mappingInfo['mapping'] : [];
+
+    $device = $deviceProfiles[array_rand($deviceProfiles)];
+
+    // Fetch fresh fbzx
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $viewUrl);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_USERAGENT, $device['ua']);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    $viewHtml = curl_exec($ch);
+    curl_close($ch);
+
+    $fbzx = '';
+    if (preg_match('/name="fbzx"\s+value="([^"]+)"/', $viewHtml, $m)) {
+        $fbzx = $m[1];
+    }
+
+    $fields = [];
+    $fields['fvv'] = '1';
+    $fields['pageHistory'] = $pageHistory;
+    if (!empty($fbzx)) $fields['fbzx'] = $fbzx;
+
+    foreach ($mapping as $entryId => $q) {
+        $col = isset($q['excelColumn']) ? $q['excelColumn'] : '';
+        if (empty($col) || !isset($row[$col])) continue;
+
+        $val = $row[$col];
+        if ($val === '' || $val === null) continue;
+
+        $type = isset($q['type']) ? $q['type'] : 0;
+        $options = isset($q['options']) ? $q['options'] : [];
+
+        if ($type === 9) { // Date
+            $d = parseExcelDate($val);
+            $fields["entry.{$entryId}_year"] = $d['year'];
+            $fields["entry.{$entryId}_month"] = $d['month'];
+            $fields["entry.{$entryId}_day"] = $d['day'];
+            $fields["entry.{$entryId}"] = $d['str'];
+        } elseif ($type === 4) { // Checkbox
+            $choices = array_filter(array_map('trim', explode(',', (string)$val)));
+            foreach ($choices as $c) {
+                $matched = $c;
+                foreach ($options as $opt) {
+                    if (strtolower(trim($opt)) === strtolower($c)) {
+                        $matched = $opt;
+                        break;
+                    }
+                }
+                $fields["entry.{$entryId}"][] = $matched;
+            }
+        } elseif (!empty($options)) {
+            $sVal = trim((string)$val);
+            $matched = $sVal;
+            foreach ($options as $opt) {
+                if (strtolower(trim($opt)) === strtolower($sVal)) {
+                    $matched = $opt;
+                    break;
+                }
+            }
+            $fields["entry.{$entryId}"] = $matched;
+        } else {
+            $fields["entry.{$entryId}"] = trim((string)$val);
+        }
+    }
+
+    $queryParts = [];
+    foreach ($fields as $k => $v) {
+        if (is_array($v)) {
+            foreach ($v as $subV) {
+                $queryParts[] = urlencode($k) . '=' . urlencode($subV);
+            }
+        } else {
+            $queryParts[] = urlencode($k) . '=' . urlencode($v);
+        }
+    }
+    $postBody = implode('&', $queryParts);
+
+    $headers = [
+        'Content-Type: application/x-www-form-urlencoded',
+        'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language: id-ID,id;q=0.9,en-US;q=0.8',
+        'Upgrade-Insecure-Requests: 1',
+        'Referer: ' . $viewUrl,
+        'Origin: https://docs.google.com'
+    ];
+    if (!empty($device['secChUa'])) {
+        $headers[] = 'Sec-Ch-Ua: ' . $device['secChUa'];
+        $headers[] = 'Sec-Ch-Ua-Mobile: ' . $device['secChUaMobile'];
+        $headers[] = 'Sec-Ch-Ua-Platform: ' . $device['secChUaPlatform'];
+    }
+
+    $startTime = microtime(true);
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $submitUrl);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $postBody);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_USERAGENT, $device['ua']);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+
+    $respHtml = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curlErr = curl_error($ch);
+    curl_close($ch);
+
+    $duration = round(microtime(true) - $startTime, 1) . 's';
+
+    $isSuccess = ($httpCode === 200) && (
+        strpos($respHtml, 'usp=form_confirm') !== false ||
+        strpos($respHtml, 'Kirim jawaban lain') !== false ||
+        strpos($respHtml, 'Tanggapan Anda telah direkam') !== false ||
+        strpos($respHtml, 'Jawaban Anda telah direkam') !== false
+    );
+
+    $namaUsaha = isset($row['Nama Usaha :']) ? $row['Nama Usaha :'] : "Data Baris " . ($rowIdx + 1);
+    $rowNum = isset($row['_rowNum']) ? $row['_rowNum'] : ($rowIdx + 2);
+
+    $progress = loadJson($progressPath, ['submittedIndices' => [], 'history' => []]);
+
+    if ($isSuccess) {
+        if (!in_array($rowIdx, $progress['submittedIndices'])) {
+            $progress['submittedIndices'][] = $rowIdx;
+        }
+        $record = [
+            'index' => $rowIdx,
+            'rowNum' => $rowNum,
+            'namaUsaha' => $namaUsaha,
+            'device' => $device['name'],
+            'timestamp' => date('c'),
+            'duration' => $duration,
+            'status' => 'SUCCESS'
+        ];
+        array_unshift($progress['history'], $record);
+        saveJson($progressPath, $progress);
+
+        return ['success' => true, 'status' => $httpCode, 'item' => $record];
+    } else {
+        $record = [
+            'index' => $rowIdx,
+            'rowNum' => $rowNum,
+            'namaUsaha' => $namaUsaha,
+            'device' => $device['name'],
+            'timestamp' => date('c'),
+            'duration' => $duration,
+            'status' => 'FAILED',
+            'error' => $curlErr ? $curlErr : "Status $httpCode"
+        ];
+        array_unshift($progress['history'], $record);
+        saveJson($progressPath, $progress);
+
+        return ['success' => false, 'status' => $httpCode, 'error' => $curlErr ? $curlErr : 'Form response tidak valid', 'item' => $record];
+    }
+}
+
+function checkAndProcessServerJobQueue($jobStatePath, $excelDataPath, $mappingPath, $settingsPath, $progressPath) {
+    if (!file_exists($jobStatePath)) return ['isRunning' => false];
+    $jobState = loadJson($jobStatePath, ['isRunning' => false]);
+    if (empty($jobState['isRunning'])) return $jobState;
+
+    $now = time();
+    $nextRun = isset($jobState['nextRunTime']) ? (int)$jobState['nextRunTime'] : 0;
+
+    // Check lock timeout (30 seconds)
+    if (!empty($jobState['isProcessing'])) {
+        $procStart = isset($jobState['processingStartTime']) ? (int)$jobState['processingStartTime'] : 0;
+        if (($now - $procStart) > 30) {
+            $jobState['isProcessing'] = false;
+        } else {
+            return $jobState;
+        }
+    }
+
+    if ($now >= $nextRun) {
+        $queue = isset($jobState['queue']) ? $jobState['queue'] : [];
+        $curIdx = isset($jobState['currentIndex']) ? (int)$jobState['currentIndex'] : 0;
+
+        if ($curIdx >= count($queue)) {
+            $jobState['isRunning'] = false;
+            $jobState['isProcessing'] = false;
+            $jobState['statusText'] = 'Batch selesai! Semua data telah berhasil disuntikkan.';
+            $jobState['lastUpdated'] = date('c');
+            saveJson($jobStatePath, $jobState);
+            return $jobState;
+        }
+
+        // Lock processing
+        $jobState['isProcessing'] = true;
+        $jobState['processingStartTime'] = $now;
+        saveJson($jobStatePath, $jobState);
+
+        $target = $queue[$curIdx];
+        $res = executeSubmitRow($target['index'], $excelDataPath, $mappingPath, $settingsPath, $progressPath);
+
+        // Reload fresh state
+        $jobState = loadJson($jobStatePath, $jobState);
+        $jobState['isProcessing'] = false;
+        $jobState['completed'] = (isset($jobState['completed']) ? $jobState['completed'] : 0) + 1;
+        $jobState['currentIndex'] = $curIdx + 1;
+        $jobState['lastSubmitText'] = ($res['success'] ? 'Sukses: ' : 'Gagal: ') . $target['namaUsaha'] . ' (Baris #' . $target['rowNum'] . ')';
+
+        if ($jobState['currentIndex'] >= count($queue)) {
+            $jobState['isRunning'] = false;
+            $jobState['statusText'] = 'Batch selesai! Semua data telah diproses.';
+            $jobState['nextRunTime'] = 0;
+        } else {
+            $nextTarget = $queue[$jobState['currentIndex']];
+            $delay = isset($target['delayAfterSec']) ? (int)$target['delayAfterSec'] : 180;
+            if ($delay <= 0) $delay = 5;
+            $jobState['nextRunTime'] = time() + $delay;
+            $jobState['statusText'] = 'Menunggu jeda sebelum ' . $nextTarget['namaUsaha'];
+        }
+
+        $jobState['lastUpdated'] = date('c');
+        saveJson($jobStatePath, $jobState);
+    }
+
+    return $jobState;
+}
+
+function spawnServerWorker() {
+    $workerScript = __DIR__ . '/worker.php';
+    if (!file_exists($workerScript)) return;
+
+    if (function_exists('popen') && function_exists('pclose')) {
+        @pclose(popen("php " . escapeshellarg($workerScript) . " > /dev/null 2>&1 &", "r"));
+    } elseif (function_exists('exec')) {
+        @exec("php " . escapeshellarg($workerScript) . " > /dev/null 2>&1 &");
+    }
+}
+
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 // 1. Login
@@ -146,15 +399,64 @@ if ($action === 'check_auth') {
     exit;
 }
 
-// Protect all other actions if not logged in
-if (empty($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+// Protect all other actions if not logged in (web mode only)
+if (php_sapi_name() !== 'cli') {
+    if (empty($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+        header('Content-Type: application/json');
+        http_response_code(401);
+        echo json_encode(['error' => 'Akses ditolak. Silakan login terlebih dahulu.', 'needLogin' => true]);
+        exit;
+    }
+}
+
+// 4. Start Server Autonomous Job
+if ($action === 'start_job') {
     header('Content-Type: application/json');
-    http_response_code(401);
-    echo json_encode(['error' => 'Akses ditolak. Silakan login terlebih dahulu.', 'needLogin' => true]);
+    $input = json_decode(file_get_contents('php://input'), true);
+    $queue = isset($input['queue']) ? $input['queue'] : [];
+    if (empty($queue)) {
+        echo json_encode(['error' => 'Antrean data kosong!']);
+        exit;
+    }
+
+    $jobState = [
+        'isRunning' => true,
+        'isProcessing' => false,
+        'startedAt' => time(),
+        'total' => count($queue),
+        'completed' => 0,
+        'currentIndex' => 0,
+        'queue' => $queue,
+        'nextRunTime' => time(), // execute first item immediately!
+        'statusText' => 'Memulai batch ' . count($queue) . ' data di server...',
+        'lastUpdated' => date('c')
+    ];
+    saveJson($jobStatePath, $jobState);
+
+    // Process the first item immediately
+    $jobState = checkAndProcessServerJobQueue($jobStatePath, $excelDataPath, $mappingPath, $settingsPath, $progressPath);
+
+    // Spawn server background worker
+    spawnServerWorker();
+
+    echo json_encode(['success' => true, 'jobState' => $jobState]);
     exit;
 }
 
-// 4. Update Job State (Synchronizes live progress between Laptop & HP)
+// 4b. Stop Server Job
+if ($action === 'stop_job') {
+    header('Content-Type: application/json');
+    $jobState = loadJson($jobStatePath, ['isRunning' => false]);
+    $jobState['isRunning'] = false;
+    $jobState['isProcessing'] = false;
+    $jobState['statusText'] = 'Injeksi dihentikan oleh pengguna.';
+    $jobState['lastUpdated'] = date('c');
+    saveJson($jobStatePath, $jobState);
+    echo json_encode(['success' => true]);
+    exit;
+}
+
+// 4c. Update Job State (Legacy compat)
 if ($action === 'update_job_state') {
     header('Content-Type: application/json');
     $input = json_decode(file_get_contents('php://input'), true);
@@ -167,6 +469,13 @@ if ($action === 'update_job_state') {
 // 5. Status
 if ($action === 'status') {
     header('Content-Type: application/json');
+
+    // Auto-check and process server queue if due
+    $jobState = checkAndProcessServerJobQueue($jobStatePath, $excelDataPath, $mappingPath, $settingsPath, $progressPath);
+    if (!empty($jobState['isRunning'])) {
+        spawnServerWorker();
+    }
+
     $excelRows = loadJson($excelDataPath, []);
     $progress = loadJson($progressPath, ['submittedIndices' => [], 'history' => []]);
     $settings = loadJson($settingsPath, [
@@ -174,7 +483,6 @@ if ($action === 'status') {
         'batchSize' => 10,
         'adminUsername' => 'admin'
     ]);
-    $jobState = loadJson($jobStatePath, ['isRunning' => false]);
 
     $total = count($excelRows);
     $submittedIndices = isset($progress['submittedIndices']) ? $progress['submittedIndices'] : [];
@@ -407,186 +715,8 @@ if ($action === 'submit_item') {
     header('Content-Type: application/json');
     $input = json_decode(file_get_contents('php://input'), true);
     $rowIdx = isset($input['index']) ? (int)$input['index'] : -1;
-
-    $excelRows = loadJson($excelDataPath, []);
-    if (!isset($excelRows[$rowIdx])) {
-        echo json_encode(['success' => false, 'error' => 'Data index tidak ditemukan']);
-        exit;
-    }
-
-    $row = $excelRows[$rowIdx];
-    $mappingInfo = loadJson($mappingPath, []);
-    $settings = loadJson($settingsPath, []);
-    $targetFormUrl = isset($mappingInfo['formUrl']) ? $mappingInfo['formUrl'] : (isset($settings['formUrl']) ? $settings['formUrl'] : 'https://forms.gle/d9Z6dsyNxaLQgYvb8');
-
-    $viewUrl = isset($mappingInfo['viewUrl']) ? $mappingInfo['viewUrl'] : $targetFormUrl;
-    $submitUrl = isset($mappingInfo['submitUrl']) ? $mappingInfo['submitUrl'] : str_replace('/viewform', '/formResponse', $targetFormUrl);
-    $pageHistory = isset($mappingInfo['pageHistory']) ? $mappingInfo['pageHistory'] : '0,1,2,3,4,5,6,7,8,9';
-    $mapping = isset($mappingInfo['mapping']) ? $mappingInfo['mapping'] : [];
-
-    global $deviceProfiles;
-    $device = $deviceProfiles[array_rand($deviceProfiles)];
-
-    // Fetch fresh fbzx
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $viewUrl);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_USERAGENT, $device['ua']);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 15);
-    $viewHtml = curl_exec($ch);
-    curl_close($ch);
-
-    $fbzx = '';
-    if (preg_match('/name="fbzx"\s+value="([^"]+)"/', $viewHtml, $m)) {
-        $fbzx = $m[1];
-    }
-
-    $fields = [];
-    $fields['fvv'] = '1';
-    $fields['pageHistory'] = $pageHistory;
-    if (!empty($fbzx)) $fields['fbzx'] = $fbzx;
-
-    foreach ($mapping as $entryId => $q) {
-        $col = isset($q['excelColumn']) ? $q['excelColumn'] : '';
-        if (empty($col) || !isset($row[$col])) continue;
-
-        $val = $row[$col];
-        if ($val === '' || $val === null) continue;
-
-        $type = isset($q['type']) ? $q['type'] : 0;
-        $options = isset($q['options']) ? $q['options'] : [];
-
-        if ($type === 9) { // Date
-            $d = parseExcelDate($val);
-            $fields["entry.{$entryId}_year"] = $d['year'];
-            $fields["entry.{$entryId}_month"] = $d['month'];
-            $fields["entry.{$entryId}_day"] = $d['day'];
-            $fields["entry.{$entryId}"] = $d['str'];
-        } elseif ($type === 4) { // Checkbox
-            $choices = array_filter(array_map('trim', explode(',', (string)$val)));
-            foreach ($choices as $c) {
-                $matched = $c;
-                foreach ($options as $opt) {
-                    if (strtolower(trim($opt)) === strtolower($c)) {
-                        $matched = $opt;
-                        break;
-                    }
-                }
-                $fields["entry.{$entryId}"][] = $matched;
-            }
-        } elseif (!empty($options)) {
-            $sVal = trim((string)$val);
-            $matched = $sVal;
-            foreach ($options as $opt) {
-                if (strtolower(trim($opt)) === strtolower($sVal)) {
-                    $matched = $opt;
-                    break;
-                }
-            }
-            $fields["entry.{$entryId}"] = $matched;
-        } else {
-            $fields["entry.{$entryId}"] = trim((string)$val);
-        }
-    }
-
-    $queryParts = [];
-    foreach ($fields as $k => $v) {
-        if (is_array($v)) {
-            foreach ($v as $subV) {
-                $queryParts[] = urlencode($k) . '=' . urlencode($subV);
-            }
-        } else {
-            $queryParts[] = urlencode($k) . '=' . urlencode($v);
-        }
-    }
-    $postBody = implode('&', $queryParts);
-
-    $headers = [
-        'Content-Type: application/x-www-form-urlencoded',
-        'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Language: id-ID,id;q=0.9,en-US;q=0.8',
-        'Upgrade-Insecure-Requests: 1',
-        'Referer: ' . $viewUrl,
-        'Origin: https://docs.google.com'
-    ];
-    if (!empty($device['secChUa'])) {
-        $headers[] = 'Sec-Ch-Ua: ' . $device['secChUa'];
-        $headers[] = 'Sec-Ch-Ua-Mobile: ' . $device['secChUaMobile'];
-        $headers[] = 'Sec-Ch-Ua-Platform: ' . $device['secChUaPlatform'];
-    }
-
-    $startTime = microtime(true);
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $submitUrl);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $postBody);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($ch, CURLOPT_USERAGENT, $device['ua']);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-
-    $respHtml = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    $curlErr = curl_error($ch);
-    curl_close($ch);
-
-    $duration = round(microtime(true) - $startTime, 1) . 's';
-
-    $isSuccess = ($httpCode === 200) && (
-        strpos($respHtml, 'usp=form_confirm') !== false ||
-        strpos($respHtml, 'Kirim jawaban lain') !== false ||
-        strpos($respHtml, 'Tanggapan Anda telah direkam') !== false ||
-        strpos($respHtml, 'Jawaban Anda telah direkam') !== false
-    );
-
-    $namaUsaha = isset($row['Nama Usaha :']) ? $row['Nama Usaha :'] : "Data Baris " . ($rowIdx + 1);
-    $rowNum = isset($row['_rowNum']) ? $row['_rowNum'] : ($rowIdx + 2);
-
-    $progress = loadJson($progressPath, ['submittedIndices' => [], 'history' => []]);
-
-    if ($isSuccess) {
-        if (!in_array($rowIdx, $progress['submittedIndices'])) {
-            $progress['submittedIndices'][] = $rowIdx;
-        }
-        $record = [
-            'index' => $rowIdx,
-            'rowNum' => $rowNum,
-            'namaUsaha' => $namaUsaha,
-            'device' => $device['name'],
-            'timestamp' => date('c'),
-            'duration' => $duration,
-            'status' => 'SUCCESS'
-        ];
-        array_unshift($progress['history'], $record);
-        saveJson($progressPath, $progress);
-
-        echo json_encode([
-            'success' => true,
-            'status' => $httpCode,
-            'item' => $record
-        ]);
-    } else {
-        $record = [
-            'index' => $rowIdx,
-            'rowNum' => $rowNum,
-            'namaUsaha' => $namaUsaha,
-            'device' => $device['name'],
-            'timestamp' => date('c'),
-            'duration' => $duration,
-            'status' => 'FAILED',
-            'error' => $curlErr ? $curlErr : "Status $httpCode"
-        ];
-        array_unshift($progress['history'], $record);
-        saveJson($progressPath, $progress);
-
-        echo json_encode([
-            'success' => false,
-            'status' => $httpCode,
-            'error' => $curlErr ? $curlErr : 'Form response tidak valid',
-            'item' => $record
-        ]);
-    }
+    $res = executeSubmitRow($rowIdx, $excelDataPath, $mappingPath, $settingsPath, $progressPath);
+    echo json_encode($res);
     exit;
 }
 

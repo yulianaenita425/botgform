@@ -1599,12 +1599,11 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in
             }
         }
 
-        // Cross-device sync handler
+        // Server-Side Autonomous Sync & Local Countdown Display
+        let localCountdownTimer = null;
+
         function syncRemoteJobState(jobState) {
             if (!jobState) return;
-
-            // If THIS device is running the loop, do not overwrite own controls
-            if (isLocalRunning) return;
 
             const liveStatus = document.getElementById('liveStatus');
             const pBar = document.getElementById('progressBar');
@@ -1619,23 +1618,72 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in
                 btnStart.disabled = true;
                 btnStop.disabled = false;
                 badge.className = 'badge-status active';
-                badgeText.innerText = 'Menyuntik (Perangkat Lain)...';
+                badgeText.innerText = 'Menyuntik di Server...';
                 liveStatus.style.display = 'block';
 
-                pLabel.innerText = `Menyuntik ${jobState.total || ''} data (Live Sync)...`;
-                pNum.innerText = `${jobState.current || 0} / ${jobState.total || 0}`;
-                const pct = jobState.total > 0 ? Math.round(((jobState.current || 0) / jobState.total) * 100) : 0;
-                pBar.style.width = pct + '%';
+                const total = jobState.total || 1;
+                const completed = jobState.completed || 0;
+                const curIdx = jobState.currentIndex || 0;
+                const pct = Math.min(100, Math.round((completed / total) * 100));
 
+                pBar.style.width = pct + '%';
+                pNum.innerText = `${completed} / ${total}`;
+                pLabel.innerText = `Menyuntik ${total} data di Cloud Server (Auto-Run)...`;
+
+                if (localCountdownTimer) clearInterval(localCountdownTimer);
+
+                function tickDisplay() {
+                    if (!jobState.isRunning) {
+                        if (localCountdownTimer) clearInterval(localCountdownTimer);
+                        return;
+                    }
+
+                    const now = Math.floor(Date.now() / 1000);
+                    const nextRun = jobState.nextRunTime || 0;
+                    const remaining = Math.max(0, nextRun - now);
+
+                    if (remaining > 0) {
+                        const m = Math.floor(remaining / 60);
+                        const s = remaining % 60;
+                        const formattedTime = `${m > 0 ? m + ' menit ' : ''}${s} detik`;
+                        const padM = String(m).padStart(2, '0');
+                        const padS = String(s).padStart(2, '0');
+
+                        const nextTarget = (jobState.queue && jobState.queue[curIdx]) ? jobState.queue[curIdx] : null;
+                        const namaNext = nextTarget ? ` (${nextTarget.namaUsaha})` : '';
+
+                        document.title = `[${padM}:${padS}] (${completed}/${total}) Auto-Injector`;
+
+                        liveStatus.innerHTML = `
+                            <div>⏳ <strong>Jeda antar data (Server Autonomous):</strong> Menunggu <strong>${formattedTime}</strong> sebelum data ke-${curIdx + 1}${namaNext}.</div>
+                            <div style="margin-top:4px;">Hitung mundur: <span class="countdown-badge">${padM}:${padS}</span> <small style="color: #15803d; margin-left: 6px; font-weight: 600;">☁️ Cloud Server Active (Aman minimize / tutup Chrome)</small></div>
+                            ${jobState.lastSubmitText ? `<div style="margin-top:5px; font-size:12px; color:#4b5563;">Status Terakhir: <em>${jobState.lastSubmitText}</em></div>` : ''}
+                        `;
+                    } else {
+                        document.title = `[Menyuntik...] (${completed}/${total}) Auto-Injector`;
+                        liveStatus.innerHTML = `
+                            <div>🚀 <strong>Sedang Menyuntikkan Data ke Google Form...</strong></div>
+                            <div style="margin-top:4px;"><span class="countdown-badge" style="background:#16a34a;">Mengirim ke Google Form...</span> <small style="color: #64748b; margin-left:6px;">Mohon tunggu beberapa detik</small></div>
+                        `;
+                    }
+                }
+
+                tickDisplay();
+                localCountdownTimer = setInterval(tickDisplay, 1000);
+
+            } else {
+                btnStart.disabled = false;
+                btnStop.disabled = true;
+                badge.className = 'badge-status';
+                badgeText.innerText = 'Siap';
+                if (localCountdownTimer) {
+                    clearInterval(localCountdownTimer);
+                    localCountdownTimer = null;
+                }
+                document.title = 'Auto-Injector Google Form | botgfrom.manjapos.my.id';
+                deactivateBackgroundKeepAlive();
                 if (jobState.statusText) {
                     liveStatus.innerHTML = jobState.statusText;
-                }
-            } else {
-                if (!isLocalRunning) {
-                    btnStart.disabled = false;
-                    btnStop.disabled = true;
-                    badge.className = 'badge-status';
-                    badgeText.innerText = 'Siap';
                 }
             }
         }
@@ -1784,17 +1832,7 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in
             }
         }
 
-        async function broadcastJobState(stateObj) {
-            try {
-                await fetch('api.php?action=update_job_state&_t=' + Date.now(), {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(stateObj)
-                });
-            } catch (e) {}
-        }
-
-        // Client-Orchestrated Injection Loop with Real-Time Server Broadcast
+        // Server-Side Autonomous Job Execution (Cloud Background Runner)
         async function startInjectionLoop() {
             const targets = getTargetRows();
             if (targets.length === 0) {
@@ -1803,174 +1841,56 @@ $isLoggedIn = !empty($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in
             }
 
             const customDelays = getCustomDelays();
-            setLocalRunningUI(true);
-            stopRequested = false;
+            const queue = targets.map((t, idx) => ({
+                index: t.index,
+                namaUsaha: t.namaUsaha,
+                rowNum: t.rowNum,
+                delayAfterSec: customDelays[idx] !== undefined ? customDelays[idx] : 180
+            }));
 
-            const pBar = document.getElementById('progressBar');
-            const pLabel = document.getElementById('progressLabel');
-            const pNum = document.getElementById('progressNumber');
+            const btnStart = document.getElementById('btnStart');
+            const btnStop = document.getElementById('btnStop');
             const liveStatus = document.getElementById('liveStatus');
 
-            pLabel.innerText = `Memproses batch ${targets.length} data...`;
-            pNum.innerText = `0 / ${targets.length}`;
-            pBar.style.width = '0%';
+            btnStart.disabled = true;
+            btnStop.disabled = false;
+            liveStatus.style.display = 'block';
+            liveStatus.innerHTML = `⏳ <strong>Mengirim antrean ${queue.length} data ke Cloud Server...</strong>`;
 
-            await broadcastJobState({
-                isRunning: true,
-                current: 0,
-                total: targets.length,
-                statusText: `🚀 Memulai batch ${targets.length} data...`
-            });
+            activateBackgroundKeepAlive();
 
-            let successCount = 0;
-            let failCount = 0;
-
-            for (let i = 0; i < targets.length; i++) {
-                if (stopRequested) {
-                    liveStatus.innerHTML = '🛑 Injeksi dihentikan oleh pengguna.';
-                    await broadcastJobState({ isRunning: false });
-                    break;
-                }
-
-                const target = targets[i];
-                pNum.innerText = `${i} / ${targets.length}`;
-                pBar.style.width = `${Math.round((i / targets.length) * 100)}%`;
-                const statusTxt = `🚀 [${i + 1}/${targets.length}] Menyuntik: <strong>"${target.namaUsaha}"</strong> (Baris #${target.rowNum})...`;
-                liveStatus.innerHTML = statusTxt;
-
-                await broadcastJobState({
-                    isRunning: true,
-                    current: i + 1,
-                    total: targets.length,
-                    statusText: statusTxt
+            try {
+                const res = await fetch('api.php?action=start_job&_t=' + Date.now(), {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ queue })
                 });
-
-                try {
-                    const res = await fetch('api.php?action=submit_item&_t=' + Date.now(), {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ index: target.index })
-                    });
-                    const d = await res.json();
-
-                    if (d.success) {
-                        successCount++;
-                        const succTxt = `✅ Berhasil menginjeksi <strong>"${target.namaUsaha}"</strong> [${d.item.device}] (${d.item.duration})`;
-                        liveStatus.innerHTML = succTxt;
-                        await broadcastJobState({
-                            isRunning: true,
-                            current: i + 1,
-                            total: targets.length,
-                            statusText: succTxt
-                        });
-                    } else {
-                        failCount++;
-                        liveStatus.innerHTML = `❌ Gagal menginjeksi baris #${target.rowNum}: ${d.error || 'Respons tidak valid'}`;
-                    }
+                const d = await res.json();
+                if (d.success) {
                     await fetchStatus();
-                } catch (e) {
-                    failCount++;
-                    liveStatus.innerHTML = `❌ Error jaringan: ${e.message}`;
+                } else {
+                    alert('Gagal memulai antrean server: ' + (d.error || 'Terjadi kesalahan'));
+                    btnStart.disabled = false;
+                    btnStop.disabled = true;
+                    deactivateBackgroundKeepAlive();
                 }
-
-                // Delay between items
-                if (i < targets.length - 1 && !stopRequested) {
-                    let delaySec = customDelays[i] !== undefined ? customDelays[i] : 180;
-                    if (delaySec <= 0) delaySec = 3;
-
-                    const nextTarget = targets[i + 1];
-                    const nextNama = nextTarget ? nextTarget.namaUsaha : `Data #${i + 2}`;
-
-                    await runClientCountdown(delaySec, i + 2, targets.length, nextNama);
-                }
+            } catch (err) {
+                alert('Koneksi terganggu: ' + err.message);
+                btnStart.disabled = false;
+                btnStop.disabled = true;
+                deactivateBackgroundKeepAlive();
             }
-
-            pBar.style.width = '100%';
-            pNum.innerText = `${targets.length} / ${targets.length}`;
-            pLabel.innerText = stopRequested ? 'Proses dihentikan.' : 'Batch selesai!';
-            liveStatus.innerHTML = `🏁 <strong>Selesai:</strong> ${successCount} berhasil, ${failCount} gagal.`;
-
-            await broadcastJobState({ isRunning: false });
-            setLocalRunningUI(false);
-            await fetchStatus();
         }
 
-        function stopInjectionLoop() {
-            stopRequested = true;
-            document.getElementById('liveStatus').innerHTML = '⚠️ Menghentikan proses...';
+        async function stopInjectionLoop() {
+            document.getElementById('liveStatus').innerHTML = '⚠️ Menghentikan proses di server...';
             deactivateBackgroundKeepAlive();
-            broadcastJobState({ isRunning: false });
-            if (countdownTimer) {
-                clearInterval(countdownTimer);
-                countdownTimer = null;
+            try {
+                await fetch('api.php?action=stop_job&_t=' + Date.now(), { method: 'POST' });
+                await fetchStatus();
+            } catch (e) {
+                console.error(e);
             }
-        }
-
-        function runClientCountdown(totalSeconds, nextIndex, totalBatch, nextNama) {
-            return new Promise(resolve => {
-                const startTime = Date.now();
-                const endTime = startTime + (totalSeconds * 1000);
-                const liveStatus = document.getElementById('liveStatus');
-                const worker = getBackgroundWorker();
-
-                function handleTick() {
-                    if (stopRequested) {
-                        if (worker) worker.postMessage({ action: 'stop' });
-                        if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
-                        document.title = 'Auto-Injector Google Form | botgfrom.manjapos.my.id';
-                        resolve();
-                        return;
-                    }
-
-                    const now = Date.now();
-                    const remainingMs = Math.max(0, endTime - now);
-                    const remaining = Math.ceil(remainingMs / 1000);
-
-                    if (remaining <= 0) {
-                        if (worker) worker.postMessage({ action: 'stop' });
-                        if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
-                        document.title = 'Auto-Injector Google Form | botgfrom.manjapos.my.id';
-                        resolve();
-                        return;
-                    }
-
-                    const m = Math.floor(remaining / 60);
-                    const s = remaining % 60;
-                    const formattedTime = `${m > 0 ? m + ' menit ' : ''}${s} detik`;
-                    const padM = String(m).padStart(2, '0');
-                    const padS = String(s).padStart(2, '0');
-
-                    // Tampilkan hitungan mundur di Title Bar browser agar terlihat saat window diminimize
-                    document.title = `[${padM}:${padS}] Jeda Data ke-${nextIndex}/${totalBatch} | Auto-Injector`;
-
-                    const delayTxt = `
-                        <div>⏳ <strong>Jeda antar data (Mode Background Aktif):</strong> Menunggu <strong>${formattedTime}</strong> sebelum data ke-${nextIndex} (${nextNama}).</div>
-                        <div style="margin-top:4px;">Hitung mundur: <span class="countdown-badge">${padM}:${padS}</span> <small style="color: #15803d; margin-left: 6px; font-weight: 600;">⚡ Anti-Freeze Aktif (Aman diminimize)</small></div>
-                    `;
-                    liveStatus.innerHTML = delayTxt;
-
-                    if (remaining % 3 === 0 || remaining === 1) {
-                        broadcastJobState({
-                            isRunning: true,
-                            current: nextIndex - 1,
-                            total: totalBatch,
-                            statusText: delayTxt
-                        });
-                    }
-                }
-
-                if (worker) {
-                    worker.onmessage = function(e) {
-                        if (e.data === 'tick') handleTick();
-                    };
-                    worker.postMessage({ action: 'start' });
-                }
-
-                if (countdownTimer) clearInterval(countdownTimer);
-                countdownTimer = setInterval(handleTick, 1000);
-
-                handleTick();
-            });
         }
 
         async function resetProgress() {
